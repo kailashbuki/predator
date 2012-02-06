@@ -1,0 +1,3 @@
+#!/bin/sh
+export PREDATOR_HOME="/opt/predator"
+exec svlogd -tt "$PREDATOR_HOME"/var/log/services/fpkeeper/

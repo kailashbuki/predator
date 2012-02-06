@@ -1,0 +1,4 @@
+#!/bin/sh
+export PREDATOR_HOME="/opt/predator"
+sudo mkdir -p $PREDATOR_HOME/var/log/services/nginx/
+sudo svlogd -tt "$PREDATOR_HOME/var/log/services/nginx/"

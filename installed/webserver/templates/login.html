@@ -1,0 +1,32 @@
+{% extends "basic.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+{% if error %}
+    <div class="alert-message error" id="error">
+        <p>{{ error }}</p>
+    </div>
+{% endif %}
+
+<form method="post">
+    <div class="alert-message block-message info"">
+    <div class="clearfix">
+        <label for="username">Username</label>
+        <div class="input">
+            <input class="xlarge" id="xlInput" name="username" size="30" type="text">
+        </div>
+    </div>
+
+    <div class="clearfix">
+        <label for="password">Password</label>
+        <div class="input">
+            <input class="xlarge" id="xlInput" name="password" size="30" type="password">
+        </div>
+    </div>
+    <div style="padding-left: 150px;"><input class="btn" type='submit' value='Log in'/></div>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+#!/bin/sh
+exec 2>&1
+echo >&2 "Starting comparator"
+export PREDATOR_HOME="/opt/predator"
+exec "$PREDATOR_HOME"/installed/analyzer/apps/comparator/comparator.py

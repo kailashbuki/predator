@@ -1,0 +1,9 @@
+To start all the backend services
+=================================
+
+        ./opt/predator/bin/start_predator
+
+To stop all the backend services
+=================================
+
+        ./opt/predator/bin/stop_predator

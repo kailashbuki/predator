@@ -1,0 +1,279 @@
+{% extends "basic.html" %}
+
+{% set active_page = 'users' %}
+
+{% block title %}Edit user information{% endblock %}
+
+{% block content %}
+
+    {% for cat, msg in get_flashed_messages(with_categories=true) %}
+        {% if msg %}
+        <div class="alert-message {{ cat }} fade in">
+            <a class="close" href="#">x</a>
+            <p>{{ msg }}</p>
+        </div>
+        {% endif %}
+    {% endfor %}
+
+
+    <ul class="tabs" data-tabs="tabs">
+        <li id="account_item" class="active"><a href="#" id="account">Account</a></li>
+        <li id="password_item"><a href="#" id="password">Password</a></li>
+        <li id="label_item"><a href="#" id="label">Label</a></li>
+        <li id="settings_item"><a href="#" id="settings">Settings</a></li>
+    </ul>
+    
+    <form id="account_form" method="post">
+        <div class="clearfix {% if form.email.errors %}error{% endif %}">
+            <label for="username">Email</label>
+            <div class="input">
+                <input class="xlarge" id="xlInput" name="email" size="30" value="{{ user['email'] }}" type="text">
+                <span class="help-inline">{% if form.email.errors %}{% for error in form.email.errors: %}  {{error}}  {% endfor %}{% endif %}</span>
+            </div>
+        </div>
+        <div class="clearfix {% if form.fullname.errors %}error{% endif %}">
+            <label for="fullname">Fullname</label>
+            <div class="input">
+                <input class="xlarge" id="xlInput" name="fullname" size="30" value="{{ user['fullname'] }}" type="text">
+                <span class="help-inline">{% if form.fullname.errors %}{% for error in form.fullname.errors: %}  {{error}}  {% endfor %}{% endif %}</span>
+            </div>
+        </div>
+        <input type="hidden" name="skip" value="['username', 'password', 'threshold']"/>
+        <input type="hidden" name="username" value="{{ user['username'] }}"/>
+        <div class="actions"><input type="submit" class="btn primary" value="Change"></div>
+    </form>
+    
+    <form id="password_form" method="post" style="display: none;">
+        <div class="clearfix {% if form.password.errors %}error{% endif %}">
+            {% if session['username'] != 'admin' %}
+                <label for="previous_password">Current Password</label>
+                <div class="input">
+                    <input class="xlarge" id="xlInput" name="previous_password" size="30" type="password">
+                </div>
+                <br/>
+            {% endif %}
+            <label for="password">New Password</label>
+            <div class="input">
+                <input class="xlarge" id="xlInput" name="password" size="30" type="password">
+                <span class="help-inline">{% if form.password.errors %}{% for error in form.password.errors: %}  {{error}}  {% endfor %}{% endif %}</span>
+            </div>
+            <br/>
+            <label for="confirm_password">Verify New Password</label>
+            <div class="input">
+                <input class="xlarge" id="xlInput" name="confirm_password" size="30" type="password">
+            </div>
+        </div>
+        <input type="hidden" name="skip" value="['username', 'email', 'fullname', 'threshold']"/>
+        <input type="hidden" name="username" value="{{ user['username'] }}"/>
+        <div class="actions"><input type="submit" class="btn primary" value="Change"></div>
+    </form>
+    
+    <form id="settings_form" method="post" style="display: none;">
+        <div class="clearfix {% if form.threshold.errors %}error{% endif %}">
+            <label for="threshold">Detection Threshold</label>
+            <div class="input">
+                <select class="small" name="threshold">
+                    {% for i in threshold %}
+                        <option value="{{ i }}" {% if i == user['threshold'] %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <span class="help-inline">Percentage match below this will be suppressed.</span>
+            </div>
+        </div>
+        <input type="hidden" name="skip" value="['username', 'password', 'fullname', 'email']"/>
+        <input type="hidden" name="username" value="{{ user['username'] }}"/>
+        <div class="actions"><input type="submit" class="btn primary" value="Change"></div>
+    </form>
+    
+    <form id="label_form" method="post" style="display: none;">
+        <div class="alert-message block-message warning">
+            Please add labels carefully. <strong>Label names and ranges should not be ambiguous</strong>. Ambiguous labels and ranges may give you a misleading result. Label <strong>ranges</strong> are left open and right close interval. For example; <strong>40-50 range</strong> would
+            mean that <strong>all values between 41 and 50 including 50</strong> fall under that label.
+        </div>
+        <div id="labels">
+            <div class="clearfix" style="background: #EEF;">
+                
+                <div class="input">
+                    <input class="span2" disabled style="cursor: default; margin-left: -60px; box-shadow:none; background: #EEF; border-color: none; border: none; font-weight: bold; color: #000;" type="text" placeholder=".span2" value="Label" />
+                    <input class="span2" disabled style="cursor: default; margin-left: -38px; box-shadow:none; background: #EEF; border-color: none; border: none; font-weight: bold; color: #000;" type="text" placeholder=".span2" value="Range" />
+                    <input class="span2" disabled style="cursor: default; margin-left: -40px; box-shadow:none; background: #EEF; margin-left: 39px; width: 55px; border-color: none; border: none; font-weight: bold; color: #000;" type="text" placeholder=".span2" value="Color" />
+                </div>
+            </div>
+            {% for l in user['labels'] %}
+                <div class="clearfix">
+                    <label for="{{ l }}" class="editable">{{ l }}</label>
+                    <input class="small label" id="{{ l }}" value="{{ l }}" type="text" name="label" style="display: none; margin-left: 42px;">
+                    <div class="input">
+                        <input class="span2" name="range" type="text" placeholder=".span2" value="{{ user['labels'][l][0] }}">
+                        <input class="span2 color" type="text" name="color" value="{{ user['labels'][l][1] }}" style="margin-left: 39px;"/>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <input id="accumulated_values" type="hidden" name="copy_labels" value=""/>
+        <div class="actions">
+            <input type="hidden" name="skip" value="['username', 'password', 'fullname', 'email', 'threshold']"/>
+            <input type="hidden" name="username" value="{{ user['username'] }}"/>
+            <a id="btn_new_form" class="btn" onclick="add_new_form()" href="#" >Add more label</a>
+            <input type="submit" class="btn primary" onclick="accumulate_labels()" value="Change">
+        </div>
+    </form>
+    
+{% endblock %}
+
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" media="screen" type="text/css" href="/static/css/colorpicker.css" />
+{% endblock %}
+
+{% block js %}
+    {{ super() }}
+    <script type="text/javascript" src="/static/js/colorpicker.js"></script>
+    
+    <script type="text/javascript">
+        function accumulate_labels(){
+            var label_fields = document.getElementsByName('label');
+            var range_fields = document.getElementsByName('range');
+            var color_fields = document.getElementsByName('color');
+
+            var dict='';
+            for(var i=0;i<label_fields.length;i++){
+                var temp_label = label_fields[i].value;
+                var temp_range = range_fields[i].value;
+                var temp_color = color_fields[i].value;
+                
+                if (temp_label && temp_range && temp_color){
+                    dict += '"' + temp_label + '":["' + temp_range + '","' + temp_color + '"],'; 
+                    //dict += '"' +  temp_label +'":"' + temp_range + '",';
+                }
+            }
+            document.getElementById('accumulated_values').value = "{"+dict.substring(0, dict.length-1)+"}";
+        }
+
+        function create_div_wrapper(){
+            var wrapper = document.createElement('div');
+            wrapper.className = "clearfix";
+            return wrapper;
+        }
+
+        function create_input_element(name, value, type, is_val, is_color){
+            var f = document.createElement('input');
+            f.name = name;
+            f.value = value;
+            f.type = type;
+            if(is_val){
+                f.style.margin = '0 0 0 18px';
+            }else{
+                f.style.margin = '0 0 0 42px';
+            }
+            if(is_color){
+                f.setAttribute('data-hex', 'true');
+                f.setAttribute('class', 'span2 color');
+                f.setAttribute('onfocus', 'activate_colorpickers()');
+            }else{
+                f.setAttribute('class', 'span2 label');
+            }
+            
+            return f;
+        }
+
+        function add_new_form(){
+            var container = document.getElementById('labels');
+            var label = create_input_element('label', '', 'text', false, false);
+            var val = create_input_element('range', '', 'text', true, false);
+            var color = create_input_element('color', '', 'color', false, true);
+
+            var wrapper = create_div_wrapper();
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(val)
+            wrapper.appendChild(color)
+
+            container.insertBefore(wrapper, container.lastChild);
+        }
+
+        function activate_colorpickers(){
+        
+            $('.color').each(function(){
+                $(this).css('backgroundColor', '#' + this.value);
+                $(this).css('borderColor', '#' + this.value);
+                $(this).css('color', '#' + this.value);
+            });
+            
+            $('.color').ColorPicker({
+                livePreview: false,
+                onSubmit: function(hsb, hex, rgb, el) {
+                    $(el).val(hex);
+                    $(el).ColorPickerHide();
+                    el.style.backgroundColor = '#' + hex;
+                    el.style.borderColor = '#' + hex;
+                    el.style.color = '#' + hex;
+                },
+                onBeforeShow: function () {
+                    $(this).css('backgroundColor', '#' + this.value);
+                    $(this).css('borderColor', '#' + this.value);
+                    $(this).css('color', '#' + this.value);
+                },
+                onShow: function (colpkr) {
+                    $(colpkr).fadeIn(500);
+                    return false;
+                },
+                onHide: function (colpkr) {
+                    $(colpkr).fadeOut(500);
+                    return false;
+                },
+                onChange: function (hsb, hex, rgb) {
+                    $(this).css('backgroundColor', '#' + hex);
+                    $(this).css('borderColor', '#' + hex);
+                    $(this).css('color', '#' + this.value);
+                }
+            }).bind('keyup', function(){
+                $(this).ColorPickerSetColor(this.value);
+            });
+        }
+
+        $(function () {
+            $('.tabs').tabs();
+            activate_colorpickers();
+        });
+
+        $('.editable').bind('click', function(e){
+            var label= this.getAttribute('for');
+            this.style.display = 'none';
+            
+            var hidden = document.getElementById(label);
+            hidden.style.display = 'inline';
+        });
+
+        $('.tabs').bind('click', function (e) {
+            var nowtab = e.target // activated tab
+            var divid = $(nowtab).attr('id');
+            if (divid == 'account'){
+                hide = ['password', 'settings', 'label'];
+            }else if (divid == 'settings'){
+                hide = ['account', 'password', 'label']
+            }else if (divid == 'password'){
+                hide = ['account', 'settings', 'label']
+            }else if (divid == 'label'){
+                hide = ['account', 'password', 'settings']
+            }
+            
+            $("#" + divid + '_form').css('display', 'inline');
+            $("#" + divid + '_item').attr('class', 'active');
+            
+            for(i=0; i<hide.length; i++){    
+                $("#" + hide[i] + '_form').css('display', 'none');
+                $("#" + hide[i] + '_item').attr('class', '');
+            }
+        });
+        
+        $(function(){
+            $(".alert-message").alert();
+        });
+        
+        $('.close').bind('click', function (e) {
+            $(".alert-message").alert('close');
+        });
+    </script>
+{% endblock %}
+    

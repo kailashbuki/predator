@@ -1,0 +1,5 @@
+#!/bin/sh
+exec 2>&1
+echo >&2 "Starting pdf2textconverter"
+export PREDATOR_HOME="/opt/predator"
+exec "$PREDATOR_HOME"/installed/preprocessor/apps/pdf2textconverter/pdf2textconverter.py

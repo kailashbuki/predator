@@ -1,0 +1,15 @@
+libevent >=  0.13.4
+gevent >= 0.13.4
+gunicorn >= 0.13.1
+nginx >= 0.8.54
+zeromq >= 2.1.4
+pyzmq >= 2.1.4
+pdftotext(libpoppler) >= 0.17.4
+mongodb(64-bit) >= 1.8.1
+pymongo >= 1.11
+mongokit >= 0.6
+flask >= 0.7.2
+werkzeug >= 0.6.2
+jinja2 >= 2.5.5
+wtforms >= 0.6.4
+runit >= 2.1.1

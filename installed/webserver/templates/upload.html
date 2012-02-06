@@ -1,0 +1,40 @@
+{% extends "basic.html" %}
+
+{% block content %}
+        
+{% for cat, msg in get_flashed_messages(with_categories=true) %}
+    {% if msg %}
+    <div class="alert-message {{ cat }} fade in">
+        <a class="close" href="#">x</a>
+        <p>{{ msg }}</p>
+    </div>
+    {% endif %}
+{% endfor %}
+
+<form class="upload" method="post" enctype="multipart/form-data" {% block js_call %} {% endblock %}>
+    <div id="file-upload">
+        <label for="file-upload" id="file-value">{% block info %}{% endblock %}</label>
+        <input class="file-field" id="fileInput" type="file" name="file" {% if multiple %}multiple{% endif %} onchange="populate_label()">
+        <input type="submit" class="btn primary" id="file-submit" value="{% block value %}{% endblock %}">
+    </div>
+</form>
+{% endblock %}
+
+{% block js %}
+    {{ super() }}
+    <script type="text/javascript">
+        $(function(){
+            $(".alert-message").alert();
+        });
+        
+        function populate_label(){
+            var filepath = $('.file-field').val();
+            $('#file-value').text(filepath);
+        }
+        
+        $('.close').bind('click', function (e) {
+            $(".alert-message").alert('close');
+        });
+    
+    </script>
+{% endblock %}

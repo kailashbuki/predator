@@ -1,0 +1,26 @@
+{% extends "basic.html" %}
+
+{% set active_page = 'dash' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+    <div class="alert-message block-message info">
+        <p>You have uploaded <strong>{{ uploaded }}</strong> documents and checked <strong>{{ checked }}</strong> documents till date.</p>
+    </div>
+    <div class="audit_log">
+        {% for log in audit_logs %}
+            <div><span class="audit_log_item"><span class="date">{{ log['ts'] }}</span>
+                &nbsp; <span class="audit_log_msg">{{ log['type'] }}ed <i>{{ log['doc'] }}</i></span></span></div>
+        {% endfor %}
+    </div>
+    {% if show_pagination_link %}
+        <div class="pagination">
+            <ul>
+              <li class="prev {% if page_number-1 == 0 %}disabled{% endif %}">{% if page_number-1 == 0 %}<a href="#">{% else %}<a href="{{ url_for('base.dashboard', page_number=page_number-1) }}">{% endif %}&larr; </a></li>
+              <li class="next {% if page_number == total_pages %}disabled{% endif %}">{% if page_number == total_pages %}<a href="#">{% else %}<a href="{{ url_for('base.dashboard', page_number=page_number+1) }}">{% endif %}&rarr;</a></li>
+            </ul>
+        </div>
+    {% endif %}
+    
+{% endblock %}

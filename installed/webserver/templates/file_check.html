@@ -1,0 +1,56 @@
+{% extends "upload.html" %}
+
+{% block title %}Check file{% endblock %}
+
+{% set active_page, multiple = ('check', False) %}
+
+{% block js %}
+    {{ super() }}
+    <script type="text/javascript">
+        function check(){
+            var el = document.getElementById('result')
+            el.style.textAlign = "center";
+            el.innerHTML = "<img src='/static/images/loading.gif'/>";
+        }
+        
+        $('#upload_target').load(function() {
+            var responseText = this.contentDocument.body.innerText;
+            if (!responseText) {
+                return;
+            }
+            
+            var indicator = this.contentDocument.getElementById('match');
+            if (indicator){
+                // clearing the result div
+                this.contentDocument.location.href = '/static/images/loading.gif';
+                
+                var result = this.contentDocument.body.innerHTML;
+                var el = document.getElementById('result')
+                el.innerHTML = result;
+               
+                $(".alert-message").alert();
+            }
+        });
+
+        $('.xclose').bind('click', function (e) {
+            $(".alert-message").alert('close');
+        });
+    </script>
+{% endblock %}
+
+{% block info %}Select file to check{% endblock %}
+
+{% block value %}Check{% endblock %}
+
+{% block js_call %}onsubmit="check()" target="upload_target"{% endblock %}
+
+{% block content %}
+    
+    {{ super() }}
+    
+    <iframe id="upload_target" name="upload_target" src="#" style='display: none;'>
+    </iframe>
+    
+    <div id="result"></div>
+    
+{% endblock %}

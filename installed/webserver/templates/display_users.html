@@ -1,0 +1,51 @@
+{% extends "basic.html" %}
+
+{% set active_page = 'users' %}
+
+{% block title %}Users{% endblock %}
+
+{% block js %}
+
+    {{ super() }}
+    <script type="text/javascript">
+        $(function(){
+            $(".alert-message").alert();
+        });
+        
+        $('.close').bind('click', function (e) {
+            $(".alert-message").alert('close');
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+{% for msg in get_flashed_messages() %}
+    <div class="alert-message success fade in" data-alert="alert">
+        <a class="close" href="#">x</a>
+        <p>{{ msg }}</p>
+    </div>
+{% endfor %}
+
+<table class="zebra-striped">
+    <thead>
+        <tr><th>Username</th><th>Email</th><th>Fullname<th><th colspan="2">Action</th></tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user['username'] }}</td>
+            <td>{{ user['email'] }}</td>
+            <td>{{ user['fullname'] }}</td>
+            <td><a href="{{ url_for('admin.user_edit', username=user['username']) }}">Edit</a></td>
+            <td><a href="{{ url_for('admin.user_delete', username=user['username']) }}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br/><br/>
+<a href="{{ url_for('admin.user_create') }}"><button class="btn danger">Create User</button></a>
+
+{% endblock %}
+
+

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+export PREDATOR_HOME="/opt/predator"
+sv force-stop "$PREDATOR_HOME"/etc/service/*/
+sv force-stop /etc/service/*/
+service runsvdir stop
+killall -9 runsv
+killall -q -9 svlogd
+exit 0

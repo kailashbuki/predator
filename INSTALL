@@ -1,0 +1,15 @@
+Third-party dependencies
+========================
+
+Predator uses various Free and Open Source Softwares. Please make sure to go
+through REQUIRES file included in the distribution and install all the mentioned
+dependencies beforehand to run predator.
+
+Installation Instructions
+=========================
+
+Run the shell script install.sh;
+    
+        ./install.sh
+        
+Hit http://localhost in your browser to access the frontend.
