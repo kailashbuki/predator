@@ -1,1 +1,21 @@
-The development of predator, a plagiarism detection system, is in progress.
+Welcome
+=======
+
+Predator is a copy detection program.
+
+
+Installation
+============
+
+See the INSTALL file included with the distribution.
+
+Resources
+=========
+
+Website: http://github.com/kailashbuki/predator
+Git reposiroty: http://github.com/kailashbuki/predator
+
+Copying
+=======
+
+MIT License
