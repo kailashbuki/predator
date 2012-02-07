@@ -140,7 +140,7 @@ def file_upload():
                             doc = filename))
                 audit.save()
                 
-                filepath = '/tmp/queue/%s' % filename
+                filepath = '/tmp/%s' % filename
                 content = fileobj.read()
                 with open(filepath, 'w') as stream:
                     stream.write(content)

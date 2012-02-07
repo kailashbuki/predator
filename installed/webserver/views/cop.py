@@ -82,7 +82,7 @@ def check():
                     doc = filename))
         audit.save()
             
-        filepath = '/tmp/queue/%s' % filename
+        filepath = '/tmp/%s' % filename
         content = uploaded.read()
         with open(filepath, 'w') as stream:
             stream.write(content)
