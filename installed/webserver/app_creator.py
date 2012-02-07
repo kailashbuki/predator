@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 # Copyright 2011 Kailash Budhathoki
 # Author: kailash.buki@gmail.com
 

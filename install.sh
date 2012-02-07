@@ -18,7 +18,7 @@ ln -s "$PREDATOR_HOME"/installed/webserver/deploy/nginx_service "$PREDATOR_HOME"
 mkdir -p "$PREDATOR_HOME"/volumes/predator/db
 mkdir -p "$PREDATOR_HOME"/volumes/predator/files
 
-# make directories for log files 
+# make directories for log files
 mkdir -p "$PREDATOR_HOME"/var/log/services/nginx
 mkdir -p "$PREDATOR_HOME"/var/log/services/gunicorn
 mkdir -p "$PREDATOR_HOME"/var/log/services/agentfront

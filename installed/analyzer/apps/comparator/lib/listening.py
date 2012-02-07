@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 #
 # Copyright (C) 2011 by kailash.buki@gmail.com
 #

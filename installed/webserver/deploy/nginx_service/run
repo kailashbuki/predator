@@ -2,4 +2,4 @@
 exec 2>&1
 echo >&2 "Starting nginx"
 export PREDATOR_HOME="/opt/predator"
-exec nginx -c $PREDATOR_HOME/installed/webserver/deploy/nginx.conf
+exec /usr/local/sbin/nginx -c $PREDATOR_HOME/installed/webserver/deploy/nginx.conf
