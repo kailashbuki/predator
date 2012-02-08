@@ -1,9 +1,22 @@
 #!/bin/sh
 
 export PREDATOR_HOME="/opt/predator"
-sv force-stop "$PREDATOR_HOME"/etc/service/*/
-sv force-stop /etc/service/*/
-service runsvdir stop
-killall -9 runsv
-killall -q -9 svlogd
+
+# load our process kill script
+source "$PREDATOR_HOME"/bin/pkill.sh
+
+# stop all the services
+sv force-stop "$PREDATOR_HOME"/etc/services/*
+
+# kill runsv and nginx
+soft_kill runsv #runsv terminates immediately on receiving TERM signal
+hard_kill nginx
+soft_kill mongodb
+
+PS="agent.py pdf2textconverter.py sanitizer.py fpkeeper.py comparator.py"
+for pp in $PS;
+    do
+        hard_kill $pp
+    done
+# successful exit
 exit 0
