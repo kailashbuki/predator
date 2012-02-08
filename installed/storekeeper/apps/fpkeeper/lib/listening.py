@@ -33,9 +33,13 @@ import gevent
 from gevent_zeromq import zmq
 import json
 import logging
+import sys
 
 from keeper import save_fp, archive_text_file
 from libfp.generating import FingerprintGenerator
+
+
+sys.path.append('/opt/predator/system/library')
 
 
 def _create_fpkeeper_in():

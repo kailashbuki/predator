@@ -7,10 +7,6 @@ export PREDATOR_HOME=/opt/predator
 echo "copying all files into /opt/predator"
 cp -r * "$PREDATOR_HOME"
 
-# copy the disc/etc/env.rc into ~/.profile
-echo "appending the envionment variables to ~/.profile"
-cat "$PREDATOR_HOME"/etc/env.rc >>~/.profile
-
 # make symbolic link to nginx service
 ln -s "$PREDATOR_HOME"/installed/webserver/deploy/nginx_service "$PREDATOR_HOME"/etc/services/nginx
 
