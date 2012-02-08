@@ -38,7 +38,7 @@ import sys
 
 from keeper import save_fp, archive_text_file
 PREDATOR_HOME = os.environ['PREDATOR_HOME']
-sys.path.append(PREDATOR_HOME)
+sys.path.append('%s/system/library' % PREDATOR_HOME)
 from libfp.generating import FingerprintGenerator
 
 
