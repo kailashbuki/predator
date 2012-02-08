@@ -2,7 +2,7 @@
 
 # force kills processes
 function hard_kill(){ 
-    for X in `ps acx | grep -i $1 | awk '{print $1}'`;
+    for X in `ps aux | grep -i $1 | awk '{print $2}'`;
         do
             sudo kill -9 $X;
         done
@@ -10,7 +10,7 @@ function hard_kill(){
 
 # sends a TERM signal to the processes
 function soft_kill(){ 
-    for X in `ps acx | grep -i $1 | awk '{print $1}'`;
+    for X in `ps aux | grep -i $1 | awk '{print $2}'`;
         do
             sudo kill -15 $X;
         done

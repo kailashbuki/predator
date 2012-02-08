@@ -136,7 +136,3 @@ def start():
         
         gevent.spawn_link_exception(_dispatch_request, ag_ws_in, ag_push, ag_a_in, identity, identity_cache, request)
         gevent.spawn_link_exception(analyzer_listener, ag_a_in, ag_ws_in, identity_cache)
-
-if __name__ == '__main__':
-    main()
-

@@ -6,12 +6,13 @@ export PREDATOR_HOME="/opt/predator"
 source "$PREDATOR_HOME"/bin/pkill.sh
 
 # stop all the services
-sv force-stop "$PREDATOR_HOME"/etc/services/*
+sv force-stop "$PREDATOR_HOME"/etc/services/*/
 
 # kill runsv and nginx
 soft_kill runsv #runsv terminates immediately on receiving TERM signal
 hard_kill nginx
 soft_kill mongodb
+hard_kill gunicorn
 
 PS="agent.py pdf2textconverter.py sanitizer.py fpkeeper.py comparator.py"
 for pp in $PS;

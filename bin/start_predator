@@ -8,6 +8,4 @@ echo "starting mongodb in daemon mode"
 mongod --fork --logpath "$PREDATOR_HOME"/var/log/mongodb.log --logappend --port 27017 --dbpath "$PREDATOR_HOME"/volumes/predator/db/
 
 # run service
-runsvdir -P "$PREDATOR_HOME"/etc/services
-
-exit 0
+exec runsvdir -P "$PREDATOR_HOME"/etc/services

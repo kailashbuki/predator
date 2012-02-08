@@ -1,6 +1,5 @@
 #!/bin/sh
 exec 2>&1
 echo >&2 "Starting webserver"
-killall -q -9 gunicorn
 export PREDATOR_HOME="/opt/predator"
 exec "$PREDATOR_HOME"/installed/webserver/deploy/run_gunicorn.sh "$@"
