@@ -39,11 +39,10 @@ import agentcore
 
 
 class AgentWsInWire: 
-    def __init__(self):
-        self.create_agent_webserver_in()
+    def __init__(self, zmq_context):
+        self.create_agent_webserver_in(zmq_context)
     
-    def create_agent_webserver_in(self):
-        zmq_context = zmq.Context()
+    def create_agent_webserver_in(self, zmq_context):
         self.socket = zmq_context.socket(zmq.XREP)
         self.socket.bind('tcp://127.0.0.1:9001')
        
@@ -54,11 +53,10 @@ class AgentWsInWire:
         return self.socket.send_multipart((identity, response))
         
 class AgentAnalyticsInWire: 
-    def __init__(self):
-        self.create_agent_analytics_in()
+    def __init__(self, zmq_context):
+        self.create_agent_analytics_in(zmq_context)
     
-    def create_agent_analytics_in(self):
-        zmq_context = zmq.Context()
+    def create_agent_analytics_in(self, zmq_context):
         self.socket = zmq_context.socket(zmq.PULL)
         self.socket.connect('tcp://127.0.0.1:9006')
        
@@ -66,21 +64,27 @@ class AgentAnalyticsInWire:
         return self.socket.recv_json()
 
 class AgentPushWire:
-    def __init__(self):
-        self.create_agent_other_wire()
+    def __init__(self, zmq_context):
+        self.create_agent_other_wire(zmq_context)
         
-    def create_agent_other_wire(self):
-        zmq_context = zmq.Context()
+    def create_agent_other_wire(self, zmq_context):
         self.socket = zmq_context.socket(zmq.PUSH)
         self.socket.bind('tcp://127.0.0.1:9002')
         
     def send(self, req):
         return self.socket.send_json(req)
 
-def analyzer_listener(ag_a_in, ag_ws_in, identity_cache):
+def _analyzer_handler(ag_a_in, ag_ws_in, identity_cache):
+    """handles the result from analyzer
+    
+    Args:
+        ag_a_in: zmq socket for communication with analyzer
+        ag_ws_in: zmq socket for communication with webserver
+        identity_cache: mapping of original identity to unique id
+    
+    Returns:
+        None
     """
-    """
-    print 'id cache=%s' % identity_cache
     while True:
         response = ag_a_in.recv_request()
         logging.warn('AGENTCORE: Received request from analyzer.')
@@ -97,42 +101,43 @@ def analyzer_listener(ag_a_in, ag_ws_in, identity_cache):
             else:
                 logging.warn('AGENTCORE: Invalid parameters in the request from analyzer.')
     
-def _dispatch_request(ag_ws_in, ag_push, ag_a_in, identity, identity_cache, request):
+def _webserver_handler(ag_ws_in, ag_push, ag_a_in, identity_cache):
     """dispatches the request to different engines based on the type of request
+    from webserver
 
     Args: 
         ag_ws_in: zmq socket for communication with webserver
         ag_push: zmq socket for communication with preprocessor
         ag_a_in: zmq socket for receiving results from analyzer
         identity_cache: mapping of original identity to the unique id
-        request: request parameters
 
     Returns: None
     """
-    pdf_path = request.get('pdf_path')
-    do_what = request.get('do_what')
-
-    if 'pdf_path' in request and 'do_what' in request:
-        uid = uuid.uuid4().hex
-        identity_cache[uid] = identity
-        req = dict(pdf_path=pdf_path, do_what=do_what, identity=uid)
-        logging.warn('AGENTCORE: Pushing the request to the preprocessor. %s' % req)
-        ag_push.send(req)
-    else:
-        logging.warn('AGENTCORE: Invalid parameters in the request from webserver.')
+    while True:
+        logging.warn('AGENTCORE: Agent listening to requests from webserver')
+        identity, request = ag_ws_in.socket.recv_multipart()
+        request = eval(request)
+        
+        pdf_path = request.get('pdf_path')
+        do_what = request.get('do_what')
+    
+        if 'pdf_path' in request and 'do_what' in request:
+            uid = uuid.uuid4().hex
+            identity_cache[uid] = identity
+            req = dict(pdf_path=pdf_path, do_what=do_what, identity=uid)
+            logging.warn('AGENTCORE: Pushing the request to the preprocessor. %s' % req)
+            ag_push.send(req)
+        else:
+            logging.warn('AGENTCORE: Invalid parameters in the request from webserver.')
 
 def start():
     """starts the agent core
     """
     identity_cache = {}
-    ag_ws_in = AgentWsInWire()
-    ag_push = AgentPushWire()
-    ag_a_in = AgentAnalyticsInWire()
-
-    while True:
-        logging.warn('AGENTCORE: Agent listening to incoming requests')
-        identity, request = ag_ws_in.socket.recv_multipart()
-        request = eval(request)
-        
-        gevent.spawn_link_exception(_dispatch_request, ag_ws_in, ag_push, ag_a_in, identity, identity_cache, request)
-        gevent.spawn_link_exception(analyzer_listener, ag_a_in, ag_ws_in, identity_cache)
+    zmq_context = zmq.Context()
+    ag_ws_in = AgentWsInWire(zmq_context)
+    ag_push = AgentPushWire(zmq_context)
+    ag_a_in = AgentAnalyticsInWire(zmq_context)
+    
+    gevent.spawn_link_exception(_webserver_handler, ag_ws_in, ag_push, ag_a_in, identity_cache)
+    gevent.spawn_link_exception(_analyzer_handler, ag_a_in, ag_ws_in, identity_cache)
