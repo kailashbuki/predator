@@ -85,6 +85,7 @@ def _analyzer_handler(ag_a_in, ag_ws_in, identity_cache):
     Returns:
         None
     """
+    logging.warn('inside analyzer result handler')
     while True:
         response = ag_a_in.recv_request()
         logging.warn('AGENTCORE: Received request from analyzer.')
@@ -113,6 +114,7 @@ def _webserver_handler(ag_ws_in, ag_push, ag_a_in, identity_cache):
 
     Returns: None
     """
+    logging.warn('inside webserver request handler')
     while True:
         logging.warn('AGENTCORE: Agent listening to requests from webserver')
         identity, request = ag_ws_in.socket.recv_multipart()
@@ -139,5 +141,6 @@ def start():
     ag_push = AgentPushWire(zmq_context)
     ag_a_in = AgentAnalyticsInWire(zmq_context)
     
+    logging.warn('spawing methods with two infinte loops in greenlets')
     gevent.spawn_link_exception(_webserver_handler, ag_ws_in, ag_push, ag_a_in, identity_cache)
-    gevent.spawn_link_exception(_analyzer_handler, ag_a_in, ag_ws_in, identity_cache)
+    _analyzer_handler(ag_a_in, ag_ws_in, identity_cache)

@@ -94,7 +94,7 @@ def check():
         s.send_json(dict(pdf_path = filepath, do_what = 'check'))
         response = s.recv_multipart()
         result = json.loads(response[0])
-        logging.info('Webserver: received result; result=%s' % result)
+        logging.warn('Webserver: received result; result=%s' % result)
     
         if result['match']['per_match']:
             labels, label_scale, threshold = get_user_prefs()
