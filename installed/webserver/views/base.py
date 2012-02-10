@@ -134,8 +134,8 @@ def logout():
         return response
     return render_template('dashboard.html')
 
-@base.route('/test', methods=['GET'])
-def test():
+@base.route('/update_db', methods=['GET'])
+def update_db():
     connection.drop_database(app.config['MONGODB_DATABASE'])
     # ensuring indexing in fingerprint collection
     DB.fingerprint.create_index('fingerprint')

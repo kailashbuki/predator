@@ -16,8 +16,12 @@ from contrib.cookies import make_cookie, unserialize_cookie, \
                 check_login_cookies, make_rememberme_cookie
 from contrib.validating import is_valid_file
 from access import requires
+from app_creator import app
+
 
 admin = Blueprint('admin', __name__)
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024 #50MB max upload size
+
 
 @admin.route('/users', methods=['GET'])
 @requires.admin()
@@ -119,41 +123,45 @@ def file_upload():
     error = None
     success = None
     if request.method == 'POST':
-        uploaded = request.files['file']
-        if not uploaded:
-            flash('file not supplied', 'error')
-            return render_template('file_upload.html', error=error)
+        try:
+            uploaded = request.files['file']
+            if not uploaded:
+                flash('file not supplied', 'error')
+                return render_template('file_upload.html', error=error)
+                
+            invalid = ''
+            processed = ''
+            for item in request.files.listvalues():
+                for fileobj in item:
+                    filename = fileobj.filename
+                    if not is_valid_file(filename):
+                        invalid += filename + ', '
+                        continue
+                    
+                    audit = Audit()
+                    audit.update(dict(
+                                username = session['username'],
+                                type = 'upload',
+                                doc = filename))
+                    audit.save()
+                    
+                    filepath = '/tmp/%s' % filename
+                    content = fileobj.read()
+                    with open(filepath, 'w') as stream:
+                        stream.write(content)
+                    
+                    s = agent_req_dispatcher()
+                    s.send_json(dict(pdf_path = filepath, do_what = 'archive'))
+                    processed += filename + ', '
             
-        invalid = ''
-        processed = ''
-        for item in request.files.listvalues():
-            for fileobj in item:
-                filename = fileobj.filename
-                if not is_valid_file(filename):
-                    invalid += filename + ', '
-                    continue
-                
-                audit = Audit()
-                audit.update(dict(
-                            username = session['username'],
-                            type = 'upload',
-                            doc = filename))
-                audit.save()
-                
-                filepath = '/tmp/%s' % filename
-                content = fileobj.read()
-                with open(filepath, 'w') as stream:
-                    stream.write(content)
-                
-                s = agent_req_dispatcher()
-                s.send_json(dict(pdf_path = filepath, do_what = 'archive'))
-                processed += filename + ', '
+            if invalid:
+                invalid = invalid.rstrip(', ')
+                flash('Invalid: { %s }' % invalid, 'error')
+            if processed:
+                processed = processed.rstrip(', ')
+                flash('Processing : { %s }' % processed, 'info')
+        except werkzeug.exceptions.RequestEntityTooLarge, e:
+            logger.warn('Maximum file size exceeded while uploading file')
+            flash('File size exceeded the maximum upload limit(50MB).')
         
-        if invalid:
-            invalid = invalid.rstrip(', ')
-            flash('Invalid: { %s }' % invalid, 'error')
-        if processed:
-            processed = processed.rstrip(', ')
-            flash('Processing : { %s }' % processed, 'info')
-            
     return render_template('file_upload.html', error=error)
