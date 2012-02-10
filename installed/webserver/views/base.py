@@ -7,6 +7,7 @@ import datetime
 import os
 
 from flask import Flask, Blueprint, request, session, redirect, render_template, url_for
+from pymongo import Connection
 import werkzeug
 
 from contrib.log_handler import logger
@@ -17,6 +18,7 @@ from views.contrib.cookies import make_cookie, unserialize_cookie, \
 from views.access import requires
 from app_creator import app, connection
 
+DB = Connection()[app.config['MONGODB_DATABASE']]
 base = Blueprint('base', __name__)
 
 @base.route('/', methods=['GET'])
@@ -135,6 +137,8 @@ def logout():
 @base.route('/test', methods=['GET'])
 def test():
     connection.drop_database(app.config['MONGODB_DATABASE'])
+    # ensuring indexing in fingerprint collection
+    DB.fingerprint.create_index('fingerprint')
     password1 = werkzeug.generate_password_hash('admin')
     user1 = User()
     user1.update({'username':'admin', 'fullname':'admin', 'password':password1, 'email':'makalu@admin.com'})
@@ -143,6 +147,6 @@ def test():
     user2 = User()
     user2.update({'username':'rick', 'fullname':'rick fowler', 'password':password2, 'email':'rick@immune.dk'})
     user2.save()
-    return 'data added to the db'
+    return 'DB indexed and User admin added to the db.'
 
     
