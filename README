@@ -9,6 +9,28 @@ Installation
 
 See the INSTALL file included with the distribution.
 
+
+Backend Tasks
+=============
+
+Starting all the predator services
+----------------------------------
+
+    > cd /opt/predator
+    > ./bin/start_predator
+
+Stopping all the predator services
+----------------------------------
+
+    > cd /opt/predator
+    > ./bin/stop_predator
+    
+Displaying all the service logs
+-------------------------------
+
+    > cd /opt/predator
+    > ./bin/service_logs
+
 Resources
 =========
 

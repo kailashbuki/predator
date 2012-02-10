@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+
+export PREDATOR_HOME="/opt/predator"
+
+tail -F "$PREDATOR_HOME"/var/log/services/*/current
