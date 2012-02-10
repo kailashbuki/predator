@@ -24,9 +24,9 @@ for the complete setup:
 
 3. Visit http://localhost/update_db to add a new user 'admin' to the database.
     You can access the rest of the features once you login using credentials given
-    below:
-        username: admin
-        password: admin
+    below:  
+        username: admin  
+        password: admin  
     
 Operation & Administration
 --------------------------
@@ -43,19 +43,19 @@ You can upload the files in the repository by visiting the 'upload' link in
 the main menu. You can select multiples files to upload. But the maximum
 file upload limit size is 50MB at once for uploading & checking. For
 checking the copy, please visit the 'check' link in main menu and upload
-your file to check.
+your file to check.  
 
 In order to start all the predator services
     > cd /opt/predator
     > ./bin/start_predator
     
-In order to stop all the predator services
-    > cd /opt/predator
-    > ./bin/stop_predator
+In order to stop all the predator services  
+    > cd /opt/predator  
+    > ./bin/stop_predator  
         
-In order to see all the service logs
-    > cd /opt/predator
-    > ./bin/service_logs
+In order to see all the service logs  
+    > cd /opt/predator  
+    > ./bin/service_logs  
 
 
 Licensing
@@ -66,13 +66,11 @@ Please see the LICENSE file included in the distribution.
 Contacts
 --------
 
-    o Email the developer at kailash<DOT>buki<AT>gmail<DOT>com
-    {kailash.buki@gmail.com} for you feedbacks, suggestions.
+* Email the developer at kailash<DOT>buki<AT>gmail<DOT>com
+{kailash.buki@gmail.com} for you feedbacks, suggestions.
     
-    OR
-    
-    o Use the tracking system in our github repository at
-    http://github.com/kailashbuki/predator/issues for any issues.
+* Use the tracking system in our github repository at
+http://github.com/kailashbuki/predator/issues for any issues.
     
 Credits
 -------
