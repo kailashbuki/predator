@@ -43,18 +43,15 @@ file upload limit size is 50MB at once for uploading & checking. For
 checking the copy, please visit the 'check' link in main menu and upload
 your file to check.  
 
-In order to start all the predator services
-***
+**In order to start all the predator services**     
     `cd /opt/predator`         
     `./bin/start_predator`     
     
-In order to stop all the predator services
-***
+**In order to stop all the predator services**    
     `cd /opt/predator`       
     `./bin/stop_predator`     
         
-In order to see all the service logs
-***
+**In order to see all the service logs**           
     `cd /opt/predator`        
     `./bin/service_logs`          
 
