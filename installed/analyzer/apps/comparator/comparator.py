@@ -33,10 +33,13 @@ import logging
 from lib import listening
 
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def main():
     """main prog
     """
-    logging.warn('Running listener loop ...')
+    logging.debug('Starting comparator ...')
     listening.listener_loop_runner()
 
 

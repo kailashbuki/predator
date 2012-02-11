@@ -42,30 +42,30 @@ sys.path.append('%s/system/library' % PREDATOR_HOME)
 from libfp.generating import FingerprintGenerator
 
 
-def _create_fpkeeper_in():
+def _create_fpkeeper_in(zmq_context):
     """zmq socket is created for incoming requests. Incoming requests come from
     pdf2textconverter app
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for listening incoming requests
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PULL)
     zmq_socket.connect('tcp://127.0.0.1:9004')
     
     return zmq_socket
 
-def _create_fpkeeper_out():
+def _create_fpkeeper_out(zmq_context):
     """zmq socket is created for publishing messages
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for dispatching results
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PUSH)
     zmq_socket.bind('tcp://127.0.0.1:9005')    
     return zmq_socket    
@@ -92,18 +92,18 @@ def _process_request(fpkeeper_out, request):
         fingerprints = fpg.fingerprints
 
         if do_what == 'archive':
-            logging.warn('FPKEEPER: Archiving the text file into the file system ...')
+            logging.debug('FPKEEPER: Archiving the text file into the file system ...')
             archived_path = archive_text_file(text_path)
-            logging.warn('FPKEEPER: Saving the fingerprints into the database ...')
+            logging.debug('FPKEEPER: Saving the fingerprints into the database ...')
             
             for fingerprint in fingerprints:
                 save_fp(fingerprint[0], archived_path)
             
-            logging.warn('FPKEEPER: Document fingerprints were saved into the db.')
+            logging.debug('FPKEEPER: Document fingerprints were saved into the db.')
             
         elif do_what == 'check':
 
-            logging.warn('FPKEEPER: Dispatching the fingerprints to the analyzer engine.')
+            logging.debug('FPKEEPER: Dispatching the fingerprints to the analyzer engine.')
             fpkeeper_out.send_json(dict(fingerprints=fingerprints, identity=identity))
             
     else:
@@ -119,12 +119,13 @@ def listener_loop_runner():
     
     Returns: None
     """
-    fpkeeper_in = _create_fpkeeper_in()
-    fpkeeper_out = _create_fpkeeper_out()
+    zmq_context = zmq.Context()
+    fpkeeper_in = _create_fpkeeper_in(zmq_context)
+    fpkeeper_out = _create_fpkeeper_out(zmq_context)
 
     while True:
         request = fpkeeper_in.recv_json()
-        logging.warn('FPKEEPER: Received request ...')
+        logging.debug('FPKEEPER: Received request ...')
         
         gevent.spawn_link_exception(_process_request, fpkeeper_out, request) 
         

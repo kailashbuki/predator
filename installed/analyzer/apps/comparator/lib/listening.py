@@ -37,30 +37,30 @@ import logging
 from comparing import compare
 
 
-def _create_analyzer_out():
+def _create_analyzer_out(zmq_context):
     """zmq socket is created for publishing messages
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for dispatching results
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PUSH)
     zmq_socket.bind('tcp://127.0.0.1:9006')
 
     return zmq_socket
 
-def _create_analyzer_in():
+def _create_analyzer_in(zmq_context):
     """zmq socket is created for incoming requests. Incoming requests come from
     pdf2textconverter app
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for listening incoming requests
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PULL)
     zmq_socket.connect('tcp://127.0.0.1:9005')
     
@@ -76,14 +76,14 @@ def _process_request(analyzer_out, request):
     Returns: None
     """
     if 'fingerprints' in request and 'identity' in request:
-        logging.warn('Comparing fingerprints ...')
+        logging.debug('Comparing fingerprints ...')
         match = compare(request.get('fingerprints'))
-        logging.warn('ANALYZER: Document fingerints match complete with the db.')
+        logging.debug('ANALYZER: Document fingerints match complete with the db.')
         response = dict(
                     match = match, 
                     identity = request.get('identity'), 
                     from_analytics=True)
-        logging.warn('ANALYZER: Sending the match to agentcore. %s' % match)
+        logging.debug('ANALYZER: Sending the match to agentcore. %s' % match)
         analyzer_out.send_json(response)
     else:
         logging.warn('ANALYZER: Unknown parameters in the request to analyzer.')
@@ -98,11 +98,12 @@ def listener_loop_runner():
     
     Returns: None
     """
-    analyzer_in = _create_analyzer_in()
-    analyzer_out = _create_analyzer_out()
+    zmq_context = zmq.Context()
+    analyzer_in = _create_analyzer_in(zmq_context)
+    analyzer_out = _create_analyzer_out(zmq_context)
 
     while True:
         request = analyzer_in.recv_json()
-        logging.warn('ANALYZER: Received request ...')
+        logging.debug('ANALYZER: Received request ...')
         
         gevent.spawn_link_exception(_process_request, analyzer_out, request)

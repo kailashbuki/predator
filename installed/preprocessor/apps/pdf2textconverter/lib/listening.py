@@ -37,29 +37,29 @@ from gevent_zeromq import zmq
 from converting import convert_pdf2textfile
 
 
-def _create_pdf2textconverter_in():
+def _create_pdf2textconverter_in(zmq_context):
     """zmq socket is created for incoming requests
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for listening incoming requests
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PULL)
     zmq_socket.connect('tcp://127.0.0.1:9002')
     
     return zmq_socket
 
-def _create_pdf2textconverter_out():
+def _create_pdf2textconverter_out(zmq_context):
     """zmq socket is created for publishing messages
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for dispatching results
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PUSH)
     zmq_socket.bind('tcp://127.0.0.1:9003')
     
@@ -81,11 +81,11 @@ def _process_request(pdf2textconverter_out, request):
 
     if 'pdf_path' in request and 'do_what' in request and 'identity' in request:
         
-        logging.warn('PREPROCESSOR: Converting to the text format ...')
+        logging.debug('PREPROCESSOR: Converting to the text format ...')
         textfilepath = convert_pdf2textfile(pdf_path)
 
         if textfilepath:
-            logging.warn('PREPROCESSOR: Pushing the result to the santizer ...')
+            logging.debug('PREPROCESSOR: Pushing the result to the santizer ...')
             pdf2textconverter_out.send_json(dict(
                                             do_what = do_what, 
                                             identity = identity, 
@@ -108,10 +108,11 @@ def listener_loop_runner():
     
     Returns: None
     """
-    pdf2textconverter_in = _create_pdf2textconverter_in()
-    pdf2textconverter_out = _create_pdf2textconverter_out()
+    zmq_context = zmq.Context()
+    pdf2textconverter_in = _create_pdf2textconverter_in(zmq_context)
+    pdf2textconverter_out = _create_pdf2textconverter_out(zmq_context)
     
     while True:
         request = pdf2textconverter_in.recv_json()
-        logging.warn('PREPROCESSOR: Received request %s' % request)
+        logging.debug('PREPROCESSOR: Received request %s' % request)
         gevent.spawn_link_exception(_process_request, pdf2textconverter_out, request)

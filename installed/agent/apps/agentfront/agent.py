@@ -33,10 +33,13 @@ import logging
 from lib import agentcore
 
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def main():
     """main prog
     """
-    logging.warn('Starting agent core ...')
+    logging.debug('Starting agent core ...')
     agentcore.start()
 
 

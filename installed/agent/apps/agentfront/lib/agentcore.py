@@ -85,10 +85,10 @@ def _analyzer_handler(ag_a_in, ag_ws_in, identity_cache):
     Returns:
         None
     """
-    logging.warn('inside analyzer result handler')
+    logging.debug('inside analyzer result handler')
     while True:
         response = ag_a_in.recv_request()
-        logging.warn('AGENTCORE: Received request from analyzer.')
+        logging.debug('AGENTCORE: Received request from analyzer.')
         if response.has_key('from_analytics'):
             identity = response.get('identity')
             match = response.get('match')
@@ -97,7 +97,7 @@ def _analyzer_handler(ag_a_in, ag_ws_in, identity_cache):
                 #TODO (kailash.buki@gmail.com): Raise exception in case identity is
                 #                               not found in cache
                 response = json.dumps(dict(match=match))
-                logging.warn('AGENTCORE: Replying back to the webserver. %s' % response)
+                logging.debug('AGENTCORE: Replying back to the webserver. %s' % response)
                 ag_ws_in.reply(act_identity, response)
             else:
                 logging.warn('AGENTCORE: Invalid parameters in the request from analyzer.')
@@ -114,9 +114,9 @@ def _webserver_handler(ag_ws_in, ag_push, ag_a_in, identity_cache):
 
     Returns: None
     """
-    logging.warn('inside webserver request handler')
+    logging.debug('inside webserver request handler')
     while True:
-        logging.warn('AGENTCORE: Agent listening to requests from webserver')
+        logging.debug('AGENTCORE: Agent listening to requests from webserver')
         identity, request = ag_ws_in.socket.recv_multipart()
         request = eval(request)
         
@@ -127,7 +127,7 @@ def _webserver_handler(ag_ws_in, ag_push, ag_a_in, identity_cache):
             uid = uuid.uuid4().hex
             identity_cache[uid] = identity
             req = dict(pdf_path=pdf_path, do_what=do_what, identity=uid)
-            logging.warn('AGENTCORE: Pushing the request to the preprocessor. %s' % req)
+            logging.debug('AGENTCORE: Pushing the request to the preprocessor. %s' % req)
             ag_push.send(req)
         else:
             logging.warn('AGENTCORE: Invalid parameters in the request from webserver.')
@@ -141,6 +141,5 @@ def start():
     ag_push = AgentPushWire(zmq_context)
     ag_a_in = AgentAnalyticsInWire(zmq_context)
     
-    logging.warn('spawing methods with two infinte loops in greenlets')
     gevent.spawn_link_exception(_webserver_handler, ag_ws_in, ag_push, ag_a_in, identity_cache)
     _analyzer_handler(ag_a_in, ag_ws_in, identity_cache)

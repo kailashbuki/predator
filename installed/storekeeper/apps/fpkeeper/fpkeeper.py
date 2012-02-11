@@ -34,10 +34,13 @@ import logging
 from lib import listening
 
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def main():
     """main prog
     """
-    logging.warn('Starting fpkeeper ...')
+    logging.debug('Starting fpkeeper ...')
     listening.listener_loop_runner()
 
 

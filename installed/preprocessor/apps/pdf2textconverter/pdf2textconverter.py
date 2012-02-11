@@ -35,10 +35,13 @@ import logging
 from lib import listening
 
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def main():
     """main prog
     """
-    logging.warn('PREPROCESSOR: Starting pdf to text converter ...')
+    logging.debug('Starting pdf2textconverter ...')
     listening.listener_loop_runner()
 
 

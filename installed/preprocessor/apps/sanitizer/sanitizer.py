@@ -33,10 +33,13 @@ import logging
 from lib import listening
 
 
+logging.basicConfig(level=logging.DEBUG)
+
+
 def main():
     """main prog
     """
-    logging.warn('Starting sanitizer ...')
+    logging.debug('Starting sanitizer ...')
     listening.listener_loop_runner()
 
 

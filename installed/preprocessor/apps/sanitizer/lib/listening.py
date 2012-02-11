@@ -38,35 +38,33 @@ import os
 from cleaning import sanitize
 
 
-
-def _create_sanitizer_in():
+def _create_sanitizer_in(zmq_context):
     """zmq socket is created for incoming requests. Incoming requests come from
     pdf2textconverter app
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for listening incoming requests
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PULL)
     zmq_socket.connect('tcp://127.0.0.1:9003')
     
     return zmq_socket
 
-def _create_sanitizer_out():
+def _create_sanitizer_out(zmq_context):
     """zmq socket is created for publishing messages
     
-    Args: None
+    Args:
+        zmq_context: zmq context
     
     Returns: 
         A zmq socket for dispatching results
     """
-    zmq_context = zmq.Context()
     zmq_socket = zmq_context.socket(zmq.PUSH)
     zmq_socket.bind('tcp://127.0.0.1:9004')
 
-    
     return zmq_socket    
 
 def _process_request(sanitizer_out, request):
@@ -83,9 +81,9 @@ def _process_request(sanitizer_out, request):
     
     if 'text_path' in request and 'do_what' in request and 'identity' in request:
         try:
-            logging.warn('SANITIZER: Sanitizing text')
+            logging.debug('SANITIZER: Sanitizing text')
             standard_string = sanitize(text_path)
-            logging.warn('SANITIZER: Standard string produced, now dispatching it to the storekeeper ...')
+            logging.debug('SANITIZER: Standard string produced, now dispatching it to the storekeeper ...')
             sanitizer_out.send_json(dict(standard_string = standard_string,
                                          text_path = text_path, 
                                          do_what = do_what,
@@ -104,14 +102,13 @@ def listener_loop_runner():
     
     Returns: None
     """
-    # TODO (kailash.buki@gmail.com): forward all errors to the alert engine
-    sanitizer_in = _create_sanitizer_in()
-    sanitizer_out = _create_sanitizer_out()
+    zmq_context = zmq.Context()
+    sanitizer_in = _create_sanitizer_in(zmq_context)
+    sanitizer_out = _create_sanitizer_out(zmq_context)
     
     while True:
         request = sanitizer_in.recv_json()
-        logging.warn('SANITIZER: Received request ...')
-        logging.warn('           %s' % request)
+        logging.debug('SANITIZER: Received request ...')
+        logging.debug('           %s' % request)
 
         gevent.spawn_link_exception(_process_request, sanitizer_out, request)
-    
