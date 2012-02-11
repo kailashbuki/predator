@@ -127,7 +127,7 @@ def check():
                         content += """<tr><td>%s</td><td>%s<span style='background: #%s;
                                     color: #FFF; border-radius: 2px; margin-left: 60px;
                                     padding: 2px 6px 2px 6px;'>%s</span></td>
-                                    <td>%d %%</td></tr>""" % (i+1, row[0], row[3], row[2], row[1])
+                                    <td>%d %%</td></tr>""" % (i+1, row[0], row[3].lstrip('#'), row[2], row[1])
                             
                 content += '</tbody></table>'
             else:
