@@ -14,15 +14,14 @@
         </div>
         {% endif %}
     {% endfor %}
-
-
+    {{ active }}
     <ul class="tabs" data-tabs="tabs">
-        <li id="account_item" class="active"><a href="#" id="account">Account</a></li>
-        <li id="password_item"><a href="#" id="password">Password</a></li>
-        <li id="label_item"><a href="#" id="label">Label</a></li>
-        <li id="settings_item"><a href="#" id="settings">Settings</a></li>
+        <li id="account_item" {% if active=='account' %} class="active" {% endif %}><a href="#" id="account">Account</a></li>
+        <li id="password_item" {% if active=='password' %} class="active" {% endif %}><a href="#" id="password">Password</a></li>
+        <li id="label_item" {% if active=='label' %} class="active" {% endif %}><a href="#" id="label">Label</a></li>
+        <li id="settings_item" {% if active=='settings' %} class="active" {% endif %}><a href="#" id="settings">Settings</a></li>
     </ul>
-    
+
     <form id="account_form" method="post">
         <div class="clearfix {% if form.email.errors %}error{% endif %}">
             <label for="username">Email</label>
@@ -245,9 +244,11 @@
             hidden.style.display = 'inline';
         });
 
-        $('.tabs').bind('click', function (e) {
-            var nowtab = e.target // activated tab
+        function toggle(nowtab){
+            var hide;
             var divid = $(nowtab).attr('id');
+            divid = divid.split('_')[0];
+            
             if (divid == 'account'){
                 hide = ['password', 'settings', 'label'];
             }else if (divid == 'settings'){
@@ -257,18 +258,30 @@
             }else if (divid == 'label'){
                 hide = ['account', 'password', 'settings']
             }
-            
+            console.log('divid='+divid);
+            console.log('hide='+hide);
             $("#" + divid + '_form').css('display', 'inline');
             $("#" + divid + '_item').attr('class', 'active');
             
-            for(i=0; i<hide.length; i++){    
+            for(i=0; i<3; i++){    
                 $("#" + hide[i] + '_form').css('display', 'none');
                 $("#" + hide[i] + '_item').attr('class', '');
-            }
+            }    
+        }
+        
+        $('.tabs').bind('click', function (e) {
+            var nowtab = e.target // activated tab
+            toggle(nowtab);
         });
         
         $(function(){
             $(".alert-message").alert();
+            // TODO: load the div depending on active class div
+            var nowtab;
+            $('.active').each(function(){
+                nowtab = $(this);
+            })
+            toggle(nowtab);
         });
         
         $('.close').bind('click', function (e) {

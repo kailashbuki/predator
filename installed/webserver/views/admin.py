@@ -2,6 +2,7 @@
 # Copyright 2011 Kailash Budhathoki
 # Author: kailash.buki@gmail.com
 
+import logging
 import subprocess
 
 from flask import Flask, Blueprint, request, session, redirect, render_template,\
@@ -76,23 +77,32 @@ def user_edit(username):
     
     form = UserForm(request.form)
     skip = request.form.get('skip')
-
+    active = 'account'
+    
     if request.method == 'POST' and form.validate(skip=skip):
         if request.form.get('password'):
+            logging.warn('password received')
+            active = 'password'
             if session['username']  != 'admin':
                 previous_password = request.form.get('previous_password')
                 if previous_password:
                     if werkzeug.check_password_hash(user['password'], previous_password):
                         pass
                 else:
-                    return render_template('edit_user.html', form=form, user=user)
-            user['password'] = werkzeug.generate_password_hash(request.form.get('password'))    
+                    return render_template('edit_user.html', form=form, user=user, active=active)
+            user['password'] = werkzeug.generate_password_hash(request.form.get('password'))
         elif request.form.get('email') and request.form.get('fullname'):
+            logging.warn('email and fullname received')
+            active = 'account'
             user['email'] = request.form.get('email')
             user['fullname'] = request.form.get('fullname')
         elif request.form.get('copy_labels'):
+            logging.warn('labels received')
+            active = 'label'
             user['labels'] = eval(request.form.get('copy_labels'))
         elif request.form.get('threshold'):
+            logging.warn('settings received')
+            active = 'settings'
             user['threshold'] = int(request.form.get('threshold'))
 
         if user.validation_errors:
@@ -100,7 +110,10 @@ def user_edit(username):
         user.save()
         flash('Information updated for user %s.' % username, 'success')
     
-    return render_template('edit_user.html', form=form, user=user, threshold=threshold)
+    if form.password.errors:
+        active = 'password'
+        
+    return render_template('edit_user.html', form=form, user=user, threshold=threshold, active=active)
 
 @admin.route('/users/delete/<username>', methods=['GET'])
 @requires.admin()
