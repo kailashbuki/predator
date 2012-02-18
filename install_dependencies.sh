@@ -3,7 +3,6 @@
 sudo mkdir -p /tmp
 
 cd /tmp
-
 echo 'Installing curl first'
 sudo apt-get install curl
 
@@ -14,7 +13,7 @@ echo 'Downloading & installing distribute'
 sudo curl http://python-distribute.org/distribute_setup.py | sudo python
 
 echo 'Downloading libevent'
-wget https://github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
+wget http://cloud.github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
 echo 'installing libevent'
 tar -C /tmp -xzf /tmp/libevent-2.0.17-stable.tar.gz
 cd /tmp/libevent-20.17
@@ -31,6 +30,7 @@ sudo pip install gunicorn
 echo 'Downloading nginx'
 sudo pip install nginx
 
+cd /tmp
 echo 'Downloading zeromq'
 wget http://download.zeromq.org/zeromq-2.1.11.tar.gz
 echo 'Installing zeromq'
@@ -43,15 +43,28 @@ sudo make install
 echo 'Downloading pyzmq'
 sudo pip install pyzmq
 
-echo 'Downloading libpng'
-wget http://downloads.sourceforge.net/project/libpng/libpng15/older-releases/1.5.7/libpng-1.5.7.tar.xz?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Flibpng%2Ffiles%2F&ts=1329403713&use_mirror=space
-echo 'Installing libpng'
-tar -C /tmp -xzf /tmp/libpng-1.5.7.tar.xz
-cd /tmp/libpng-1.5.7
+cd /tmp
+echo 'Downloading xz utils'
+wget http://tukaani.org/xz/xz-5.0.3.tar.gz
+echo 'Installing xz utils'
+tar -C /tmp -xzf /tmp/xz-5.0.3.tar.gz
+cd /tmp/xz-5.0.3.tar.gz
 ./configure
 make
 sudo make install
 
+cd /tmp
+echo 'Downloading libpng'
+wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.8.tar.xz
+echo 'Installing libpng'
+xz -d /tmp/libpng-1.5.8.tar.xz
+tar -xzf libpng-1.5.8.tar
+cd /tmp/libpng-1.5.8
+./configure
+make
+sudo make install
+
+cd /tmp
 echo 'Downloading libpoppler'
 wget http://poppler.freedesktop.org/poppler-0.18.4.tar.gz
 echo 'Installing libpoppler'
@@ -61,6 +74,7 @@ cd /tmp/poppler-0.18.4
 make
 sudo make install
 
+cd /tmp
 echo 'Downloading mongodb 64-bit'
 wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.0.2.tgz
 echo 'Installing mongodb'
