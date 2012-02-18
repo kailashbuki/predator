@@ -16,7 +16,7 @@ echo 'Downloading libevent'
 wget http://cloud.github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
 echo 'installing libevent'
 tar -C /tmp -xzf /tmp/libevent-2.0.17-stable.tar.gz
-cd /tmp/libevent-20.17
+cd /tmp/libevent-2.0.17
 ./configure
 make
 sudo make install
@@ -27,8 +27,15 @@ sudo pip install gevent
 echo 'Downloading gunicorn'
 sudo pip install gunicorn
 
+cd /tmp
 echo 'Downloading nginx'
-sudo pip install nginx
+wget http://nginx.org/download/nginx-1.0.12.tar.gz
+echo 'Installing nginx'
+tar -C /tmp -xzf /tmp/nginx-1.0.12.tar.gz
+cd /tmp/nginx-1.0.12
+./configure
+make
+sudo make install
 
 cd /tmp
 echo 'Downloading zeromq'
@@ -48,7 +55,7 @@ echo 'Downloading xz utils'
 wget http://tukaani.org/xz/xz-5.0.3.tar.gz
 echo 'Installing xz utils'
 tar -C /tmp -xzf /tmp/xz-5.0.3.tar.gz
-cd /tmp/xz-5.0.3.tar.gz
+cd /tmp/xz-5.0.3
 ./configure
 make
 sudo make install
