@@ -31,7 +31,7 @@ cd /tmp
 echo 'Downloading PCRE library'
 wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.30.tar.gz
 echo 'Installing PCRE library'
-tar -C /tmp /tmp/pcre-8.30.tar.gz
+tar -C /tmp -xzf /tmp/pcre-8.30.tar.gz
 cd /tmp/pcre-8.30
 ./configure
 make
