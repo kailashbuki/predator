@@ -51,8 +51,8 @@ cd /tmp
 echo 'Installing libtool, autoconf, automake'
 sudo apt-get install libtool autoconf automake
 
-echo 'Installing  uuid-dev package, uuid/e2fsprogs'
-sudo apt-get install uuid-dev package uuid/e2fsprogs
+echo 'Installing  uuid-dev'
+sudo apt-get install uuid-dev
 
 echo 'Downloading zeromq'
 wget http://download.zeromq.org/zeromq-2.1.11.tar.gz
