@@ -16,7 +16,7 @@ echo 'Downloading libevent'
 wget http://cloud.github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
 echo 'installing libevent'
 tar -C /tmp -xzf /tmp/libevent-2.0.17-stable.tar.gz
-cd /tmp/libevent-2.0.17
+cd /tmp/libevent-2.0.17-stable
 ./configure
 make
 sudo make install
@@ -38,6 +38,12 @@ make
 sudo make install
 
 cd /tmp
+echo 'Installing libtool, autoconf, automake'
+sudo apt-get install libtool autoconf automake
+
+echo 'Installing  uuid-dev package, uuid/e2fsprogs'
+sudo apt-get install uuid-dev package uuid/e2fsprogs
+
 echo 'Downloading zeromq'
 wget http://download.zeromq.org/zeromq-2.1.11.tar.gz
 echo 'Installing zeromq'
@@ -46,6 +52,7 @@ cd /tmp/zeromq-2.1.11
 ./configure
 make
 sudo make install
+sudo ldconfig
 
 echo 'Downloading pyzmq'
 sudo pip install pyzmq
