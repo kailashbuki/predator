@@ -28,6 +28,16 @@ echo 'Downloading gunicorn'
 sudo pip install gunicorn
 
 cd /tmp
+echo 'Downloading PCRE library'
+wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.30.tar.gz
+cd 'Installing PCRE library'
+tar -C /tmp /tmp/pcre-8.30.tar.gz
+cd /tmp/pcre-8.30
+./configure
+make
+sudo make install
+
+cd /tmp
 echo 'Downloading nginx'
 wget http://nginx.org/download/nginx-1.0.12.tar.gz
 echo 'Installing nginx'
