@@ -100,7 +100,7 @@ cd /tmp
 echo 'Adding a gpg key to mongodb mirror site'
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 echo 'Downloading & installing mongodb'
-sudo apt-get install mongodb-10gen
+sudo apt-get install mongodb
 
 echo 'Downloading pymongo'
 sudo pip install pymongo
