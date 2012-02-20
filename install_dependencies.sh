@@ -85,7 +85,7 @@ sudo make install
 
 cd /tmp
 echo 'Downloading font-config'
-sudo apt-get install fontconfig
+sudo apt-get install fontconfig fontconfig-dev
 
 echo 'Downloading libpoppler'
 wget http://poppler.freedesktop.org/poppler-0.18.4.tar.gz
@@ -97,14 +97,10 @@ make
 sudo make install
 
 cd /tmp
-echo 'Downloading mongodb 64-bit'
-wget http://fastdl.mongodb.org/linux/mongodb-linux-x86_64-2.0.2.tgz
-echo 'Installing mongodb'
-tar -C /tmp -xzf /tmp/mongodb-linux-x86_64-2.0.2.tgz
-cd /tmp/mongodb-linux-x86_64-2.0.2
-./configure
-make
-sudo make install
+echo 'Adding a gpg key to mongodb mirror site'
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+echo 'Downloading & installing mongodb'
+sudo apt-get install mongodb-10gen
 
 echo 'Downloading pymongo'
 sudo pip install pymongo
@@ -121,5 +117,8 @@ sudo pip install werkzeug
 echo 'Downloading jinja2'
 sudo pip install jinja2
 
+echo 'Downloading & installing mercurial'
+sudo apt-get install mercurial
+
 echo 'Downloading wtform-fork'
-sudo pip install hg + https://bitbucket.org/kailashbuki/wtforms-fork
+sudo pip install hg+https://bitbucket.org/kailashbuki/wtforms-fork
