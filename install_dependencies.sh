@@ -97,10 +97,10 @@ make
 sudo make install
 
 cd /tmp
-echo 'Adding a gpg key to mongodb mirror site'
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
-echo 'Downloading & installing mongodb'
-sudo apt-get install mongodb
+echo 'Downloading mongodb'
+wget http://downloads-distro.mongodb.org/repo/ubuntu-upstart/dists/dist/10gen/binary-i386/mongodb-10gen_2.0.2_i386.deb
+echo 'Installing mongodb'
+sudo dpkg -i /tmp/mongodb-10gen_2.0.2_i386.deb
 
 echo 'Downloading pymongo'
 sudo pip install pymongo
