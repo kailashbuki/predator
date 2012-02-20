@@ -122,3 +122,6 @@ sudo apt-get install mercurial
 
 echo 'Downloading wtform-fork'
 sudo pip install hg+https://bitbucket.org/kailashbuki/wtforms-fork
+
+echo 'Downloading and installing runit'
+sudo apt-get install runit
