@@ -3,11 +3,14 @@
 sudo mkdir -p /tmp
 
 cd /tmp
+echo 'Installing g++'
+sudo apt-get install g++
+
 echo 'Installing curl first'
 sudo apt-get install curl
 
-echo 'Downloading & installing python development headers'
-sudo apt-get install python-dev
+echo 'Downloading & installing python development headers and python-pip'
+sudo apt-get install python-dev build-essential python-pip
 
 echo 'Downloading & installing distribute'
 sudo curl http://python-distribute.org/distribute_setup.py | sudo python
@@ -68,27 +71,22 @@ echo 'Downloading pyzmq'
 sudo pip install pyzmq
 
 cd /tmp
-echo 'Downloading xz utils'
-wget http://tukaani.org/xz/xz-5.0.3.tar.gz
-echo 'Installing xz utils'
-tar -C /tmp -xzf /tmp/xz-5.0.3.tar.gz
-cd /tmp/xz-5.0.3
-./configure
-make
-sudo make install
+echo 'Downloading & installing zlib dev packages'
+sudo apt-get install zlib1g-dev
 
-cd /tmp
 echo 'Downloading libpng'
-wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.8.tar.xz
+wget http://space.dl.sourceforge.net/project/libpng/libpng15/older-releases/1.5.4/libpng-1.5.4.tar.gz
 echo 'Installing libpng'
-xz -d /tmp/libpng-1.5.8.tar.xz
-tar -xzf libpng-1.5.8.tar
-cd /tmp/libpng-1.5.8
+tar -C /tmp -xzf /tmp/libpng-1.5.4.tar.gz
+cd /tmp/libpng-1.5.4
 ./configure
 make
 sudo make install
 
 cd /tmp
+echo 'Downloading font-config'
+sudo apt-get install fontconfig
+
 echo 'Downloading libpoppler'
 wget http://poppler.freedesktop.org/poppler-0.18.4.tar.gz
 echo 'Installing libpoppler'
