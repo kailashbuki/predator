@@ -9,15 +9,14 @@ source "$PREDATOR_HOME"/bin/pkill.sh
 sv force-stop "$PREDATOR_HOME"/etc/services/*/
 
 # kill runsv and nginx
-soft_kill runsv #runsv terminates immediately on receiving TERM signal
-hard_kill nginx
-soft_kill mongodb
-hard_kill gunicorn
+sudo kill -9 nginx
+sudo kill -15 runsv #runsv terminates immediately on receiving TERM signal
+sudo kill -9 gunicorn
 
 PS="agent.py pdf2textconverter.py sanitizer.py fpkeeper.py comparator.py"
 for pp in $PS;
     do
-        hard_kill $pp
+        sudo kill -9 $pp
     done
 # successful exit
 exit 0

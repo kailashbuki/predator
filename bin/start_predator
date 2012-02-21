@@ -3,9 +3,22 @@ set -e
 
 export PREDATOR_HOME="/opt/predator"
 
-# start mongodb
-echo "starting mongodb in daemon mode"
-mongod --fork --logpath "$PREDATOR_HOME"/var/log/mongodb.log --logappend --port 27017 --dbpath "$PREDATOR_HOME"/volumes/predator/db/
+mongodb_lockfile="$PREDATOR_HOME/volumes/predator/mongod.lock"
+mongo_running=false
+if test -f "$mongodb_lockfile" ; then
+ Ê Êpid=`cat "$lockfile"`
+ Ê Êif diff -N /usr/bin/mongod "/proc/$pid/exe" >/dev/null ; then
+ Ê Ê Ê Êecho >&2 "MongoDB is already running with pid $pid"
+        mongo_running=true
+ Ê Êelse
+    Ê Êrm -f "$lockfile"
+    fi
+fi
+
+if !$mongo_running; then
+    # start mongodb
+    echo "starting mongodb in daemon mode"
+    mongod --fork --logpath "$PREDATOR_HOME"/var/log/mongodb.log --logappend --port 27017 --dbpath "$PREDATOR_HOME"/volumes/predator/db/
 
 # run service
 exec runsvdir -P "$PREDATOR_HOME"/etc/services
