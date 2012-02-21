@@ -41,14 +41,8 @@ make
 sudo make install
 
 cd /tmp
-echo 'Downloading nginx'
-wget http://nginx.org/download/nginx-1.0.12.tar.gz
-echo 'Installing nginx'
-tar -C /tmp -xzf /tmp/nginx-1.0.12.tar.gz
-cd /tmp/nginx-1.0.12
-./configure
-make
-sudo make install
+echo 'Downloading & installing nginx'
+sudo apt-get install -y nginx
 
 cd /tmp
 echo 'Installing libtool, autoconf, automake'
