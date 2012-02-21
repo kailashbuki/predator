@@ -4,13 +4,13 @@ sudo mkdir -p /tmp
 
 cd /tmp
 echo 'Installing g++'
-sudo apt-get install g++
+sudo apt-get install -y g++
 
 echo 'Installing curl first'
-sudo apt-get install curl
+sudo apt-get install -y curl
 
 echo 'Downloading & installing python development headers and python-pip'
-sudo apt-get install python-dev build-essential python-pip
+sudo apt-get install -y python-dev build-essential python-pip
 
 echo 'Downloading & installing distribute'
 sudo curl http://python-distribute.org/distribute_setup.py | sudo python
@@ -52,10 +52,10 @@ sudo make install
 
 cd /tmp
 echo 'Installing libtool, autoconf, automake'
-sudo apt-get install libtool autoconf automake
+sudo apt-get install -y libtool autoconf automake
 
 echo 'Installing  uuid-dev'
-sudo apt-get install uuid-dev
+sudo apt-get install -y uuid-dev
 
 echo 'Downloading zeromq'
 wget http://download.zeromq.org/zeromq-2.1.11.tar.gz
@@ -72,7 +72,7 @@ sudo pip install pyzmq
 
 cd /tmp
 echo 'Downloading & installing zlib dev packages'
-sudo apt-get install zlib1g-dev
+sudo apt-get install -y zlib1g-dev
 
 echo 'Downloading libpng'
 wget http://space.dl.sourceforge.net/project/libpng/libpng15/older-releases/1.5.4/libpng-1.5.4.tar.gz
@@ -85,7 +85,7 @@ sudo make install
 
 cd /tmp
 echo 'Downloading font-config'
-sudo apt-get install fontconfig fontconfig-dev
+sudo apt-get install -y fontconfig fontconfig-dev
 
 echo 'Downloading libpoppler'
 wget http://poppler.freedesktop.org/poppler-0.18.4.tar.gz
@@ -107,6 +107,9 @@ sudo pip install pymongo
 
 echo 'Downloading mongokit'
 sudo pip install mongokit
+
+echo 'Downloading & installing gevent_zeromq'
+sudo pip install gevent-zeromq
 
 echo 'Downloading flask'
 sudo pip install flask
