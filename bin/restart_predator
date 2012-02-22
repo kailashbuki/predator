@@ -11,5 +11,5 @@ else
         mongod --fork --logpath "$PREDATOR_HOME"/var/log/mongodb.log --logappend --port 27017 --dbpath "$PREDATOR_HOME"/volumes/predator/db/
 fi
 
-# run service
-exec sudo runsvdir -P "$PREDATOR_HOME"/etc/services 
+#restart all services
+sudo sv restart /opt/predator/etc/services/*

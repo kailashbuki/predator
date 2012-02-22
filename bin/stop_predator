@@ -25,6 +25,9 @@ pkill nginx hard
 pkill runsv soft #runsv terminates immediately on receiving TERM signal
 pkill gunicorn hard
 
+sudo killall nginx 2>/dev/null
+sudo killall gunicorn 2>/dev/null
+
 PS="agent.py pdf2textconverter.py sanitizer.py fpkeeper.py comparator.py"
 for pp in $PS;
     do
