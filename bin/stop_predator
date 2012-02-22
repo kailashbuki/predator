@@ -8,15 +8,14 @@ source "$PREDATOR_HOME"/bin/pkill.sh
 # stop all the services
 sv force-stop "$PREDATOR_HOME"/etc/services/*/
 
-# kill runsv and nginx
-sudo kill -9 nginx
-sudo kill -15 runsv #runsv terminates immediately on receiving TERM signal
-sudo kill -9 gunicorn
+sudo kill -9 `ps aux | grep -i nginx | awk '{print $2}'`
+sudo kill -15 `ps aux | grep -i runsv | awk '{print $2}'` #runsv terminates immediately on receiving TERM signal
+sudo kill -9 `ps aux | grep -i gunicorn | awk '{print $2}'`
 
 PS="agent.py pdf2textconverter.py sanitizer.py fpkeeper.py comparator.py"
 for pp in $PS;
     do
-        sudo kill -9 $pp
+        sudo kill -9 `ps aux | grep -i $pp | awk '{print $2}'`
     done
 # successful exit
 exit 0
