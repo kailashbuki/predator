@@ -1,18 +1,34 @@
 #!/bin/sh
 
+set -e
+
 export PREDATOR_HOME="/opt/predator"
 
 # stop all the services
 sv force-stop "$PREDATOR_HOME"/etc/services/*/
 
-sudo kill -9 `ps aux | grep -i nginx | awk '{print $2}'`
-sudo kill -15 `ps aux | grep -i runsv | awk '{print $2}'` #runsv terminates immediately on receiving TERM signal
-sudo kill -9 `ps aux | grep -i gunicorn | awk '{print $2}'`
+pkill()
+{
+    proc="$1"
+    killtype="$2"
+    for pid in `ps aux | grep -i "$proc" | awk '{print $2}'`;
+        do
+            if [ "$killtype" = "hard" ] ; then
+                sudo kill -9 $pid 2>/dev/null
+            else
+                sudo kill -15 $pid 2>/dev/null
+            fi
+        done
+}
+
+pkill nginx hard
+pkill runsv soft #runsv terminates immediately on receiving TERM signal
+pkill gunicorn hard
 
 PS="agent.py pdf2textconverter.py sanitizer.py fpkeeper.py comparator.py"
 for pp in $PS;
     do
-        sudo kill -9 `ps aux | grep -i $pp | awk '{print $2}'`
+        pkill "$pp" hard
     done
 # successful exit
 exit 0
