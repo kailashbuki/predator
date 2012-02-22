@@ -2,9 +2,6 @@
 
 export PREDATOR_HOME="/opt/predator"
 
-# load our process kill script
-source "$PREDATOR_HOME"/bin/pkill.sh
-
 # stop all the services
 sv force-stop "$PREDATOR_HOME"/etc/services/*/
 
