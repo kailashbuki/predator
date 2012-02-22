@@ -16,10 +16,10 @@ echo 'Downloading & installing distribute'
 sudo curl http://python-distribute.org/distribute_setup.py | sudo python
 
 echo 'Downloading libevent'
-wget http://cloud.github.com/downloads/libevent/libevent/libevent-2.0.17-stable.tar.gz
+wget http://cloud.github.com/downloads/libevent/libevent/libevent-2.0.12-stable.tar.gz
 echo 'installing libevent'
-tar -C /tmp -xzf /tmp/libevent-2.0.17-stable.tar.gz
-cd /tmp/libevent-2.0.17-stable
+tar -C /tmp -xzf /tmp/libevent-2.0.12-stable.tar.gz
+cd /tmp/libevent-2.0.12-stable
 ./configure
 make
 sudo make install
