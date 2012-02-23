@@ -65,6 +65,7 @@ def filter_row(row, labels, label_scale, threshold):
 @requires.login()
 def check():
     result = None
+    match = False
     if request.method == 'POST':
         try:
             uploaded = request.files.get('file')
@@ -124,12 +125,19 @@ def check():
                 for i, row in enumerate(result['match']['per_match']):
                     above_threshold, row = filter_row(row, labels, label_scale, threshold)
                     if above_threshold:
+                        match = True
                         content += """<tr><td>%s</td><td>%s<span style='background: #%s;
                                     color: #FFF; border-radius: 2px; margin-left: 60px;
                                     padding: 2px 6px 2px 6px;'>%s</span></td>
                                     <td>%d %%</td></tr>""" % (i+1, row[0], row[3].lstrip('#'), row[2], row[1])
                             
                 content += '</tbody></table>'
+                if not match:
+                    content = """<div id="match" style="display:none;"></div>
+                                <div class="alert-message success fade in">
+                                <a class="close" href="#">x</a>
+                                <p>No match found.</p></div>
+                                """
             else:
                 content += """<div class="alert-message success fade in">
                             <a class="close" href="#">x</a>
