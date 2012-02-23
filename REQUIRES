@@ -11,5 +11,5 @@ mongokit >= 0.6
 flask >= 0.7.2
 werkzeug >= 0.6.2
 jinja2 >= 2.5.5
-wtforms >= 0.6.4
+wtforms(https://bitbucket.org/kailashbuki/wtforms-fork) >= 0.6.4
 runit >= 2.1.1
