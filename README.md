@@ -54,6 +54,12 @@ your file to check.
     `cd /opt/predator`        
     `./bin/service_logs`          
 
+Screenshots
+-----------
+
+It would have been even better if predator was hosted somewhere. But since i
+cannot afford to put this up, i have rather uploaded the screenshots here ...
+http://www.flickr.com/photos/kailashbuki/sets/72157629071025502/
 
 Licensing
 ---------
