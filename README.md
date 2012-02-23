@@ -19,10 +19,9 @@ for the complete setup:
 
 1. Execute the shell script install.sh;  
     `./install.sh`
-2. Hit `http://localhost` in your browser to access the frontend.  
-3. Visit `http://localhost/update_db` to add a new user 'admin' to the database.
-    You can access the rest of the features once you login using credentials given
-    below:     
+
+2. You can access the rest of the features at `http://localhost` or http://<ip_address>
+    once you login using credentials given below:     
         `username: admin`     
         `password: admin`     
     
@@ -72,4 +71,3 @@ Credits
 -------
 
 Please see the AUTHORS file included in the distribution.
-
