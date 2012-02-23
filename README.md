@@ -20,7 +20,7 @@ for the complete setup:
 1. Execute the shell script install.sh;  
     `./install.sh`
 
-2. You can access the rest of the features at `http://localhost` or http://<ip_address>
+2. You can access the rest of the features at `http://localhost` or http://ip_address
     once you login using credentials given below:     
         `username: admin`     
         `password: admin`     
