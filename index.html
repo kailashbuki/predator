@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Predator by kailashbuki</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Predator</h1>
+        <p>Copy Detection System</p>
+        <p class="view"><a href="https://github.com/kailashbuki/predator">View the Project on GitHub <small>kailashbuki/predator</small></a></p>
+        <ul>
+          <li><a href="https://github.com/kailashbuki/predator/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/kailashbuki/predator/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/kailashbuki/predator">Fork On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>Predator</h1>
+
+<h2>What is it?</h2>
+
+<p>Predator is a copy detection system. It is a fork of ROCOP-A plagiarism
+detection system. Written in a completely modular architecture with state-of
+-art message passing technology, developers aim to provide a robust,
+industry standard copy detection software with freely available source code.</p>
+
+<h2>Installation</h2>
+
+<p>Predator uses various Free and Open Source Softwares. Please make sure to go
+through REQUIRES file included in the distribution and install all the
+mentioned dependencies beforehand to run predator. Follow the steps below
+for the complete setup:</p>
+
+<ol>
+<li><p>Execute the shell script install.sh;<br><code>./install.sh</code></p></li>
+<li><p>You can access the rest of the features at <code>http://localhost</code> or http://ip_address
+once you login using credentials given below:<br><code>username: admin</code><br><code>password: admin</code>     </p></li>
+</ol><h2>Operation &amp; Administration</h2>
+
+<p>Each logged in user can set their own preferences for copy detection.
+Configurable parameters are label and threshold.</p>
+
+<p>Once the threshold is set, percentage match below the threshold value will
+be rejected. You can also set labels with the color for the match percentage.
+All the matching documents will be displayed with the label color and label
+text lying in the match range.</p>
+
+<p>You can upload the files in the repository by visiting the 'upload' link in
+the main menu. You can select multiples files to upload. But the maximum
+file upload limit size is 50MB at once for uploading &amp; checking. For
+checking the copy, please visit the 'check' link in main menu and upload
+your file to check.  </p>
+
+<p><strong>In order to start all the predator services</strong><br><code>cd /opt/predator</code><br><code>./bin/start_predator</code>     </p>
+
+<p><strong>In order to stop all the predator services</strong><br><code>cd /opt/predator</code><br><code>./bin/stop_predator</code>     </p>
+
+<p><strong>In order to see all the service logs</strong><br><code>cd /opt/predator</code><br><code>./bin/service_logs</code>          </p>
+
+<h2>Demo</h2>
+
+<p>It would have been even better if predator was hosted somewhere. But since i
+cannot afford to put this up, i have rather uploaded the screenshots here ...
+<a href="http://www.flickr.com/photos/kailashbuki/sets/72157629071025502/detail/">http://www.flickr.com/photos/kailashbuki/sets/72157629071025502/detail/</a></p>
+
+<h2>Licensing</h2>
+
+<p>Please see the LICENSE file included in the distribution.</p>
+
+<h2>Contacts</h2>
+
+<ul>
+<li>Email the developer at kailash.buki@gmail.com for your feedbacks, suggestions. </li>
+<li>Use the tracking system in our github repository at
+<a href="http://github.com/kailashbuki/predator/issues">http://github.com/kailashbuki/predator/issues</a> for any issues.</li>
+</ul><h2>Credits</h2>
+
+<p>Please see the AUTHORS file included in the distribution.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/kailashbuki">kailashbuki</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><!--<![endif]-->
+  </body>
+</html>
