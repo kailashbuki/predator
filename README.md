@@ -4,10 +4,7 @@ Predator
 What is it?
 -----------
 
-Predator is a copy detection system. It is a fork of ROCOP-A plagiarism
-detection system. Written in a completely modular architecture with state-of
--art message passing technology, developers aim to provide a robust,
-industry standard copy detection software with freely available source code.
+Predator is a copy detection system.
 
 Installation
 ------------
